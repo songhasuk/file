@@ -1,0 +1,139 @@
+[다중 인터페이스 구현]
+= 인터페이스1,2에 정의된 추상 클래스를 강제적으로 재정의해서 기능을 구현해야되는 
+class 구현클래스명 implements 인터페이스1, 인터페이스2
+[인터페이스 상속]
+=상속받은 자식 인터페이스에 정의 해야될 추상메소드를 모두 상속받아서 편하게 
+interface 자식-인터페이스명 extends 인터페이스1, 인터페이스2
+↓
+class 구현클래스명 implements 자식-인터페이스명
+
+자식-인터페이스명 참조주소 = new 구현 클래스()  //부모-인터페이스 1,2 둘다 호출 가능
+부모-인터페이스1 참조주소 = new 구현 클래스()   //부모-인터페이스 1만 호출가능
+부모-인터페이스2 참조주소 = new 구현 클래스()   //부모-인터페이스 2만 호출가능
+
+[다형성]
+=부모의 참조주소는 자식클래스들의 주소값(객체)를 가질수 있다
+=하지만 오버라이드(재정의)된 메소드랑, 추가 정의된 명시적 생성자(매개변수 받는)는 쓸수가 있다. 
+부모-클래스 참조주소 = new 자식클래스();
+
+
+[객체타입 형변환]
+부모 클래스 : 1, 2, 3(추상)
+자식 클래스 : 4(재정의), 5
+
+Car sc2 = new SuperCar(30, 40);
+		
+SuperCar sp = (SuperCar) sc2;  //업캐스트(강제변환)
+
+부모-클래스명 참조주소1 = new 자식클래스();   //1,2,4 사용가능
+자식-클래스명 참조주소2 = (부모-클래스명) 참조주소1 // 1,2,4,5 사용가능
+
+SuperCar sp2 = new SuperCar(20,20);
+		
+Car c2 = (Car)sp2;
+
+자식-클래스명 참조변수1 = new 자식 클래스() 		//1,2,3,4,5 사용가능
+부모-클래스명 참조변수2  = (부모- 클래스명) 참조변수1  //1,2,4 만 사용가능
+		
+
+public interface Ainterface {
+	
+	void run();
+	int sum (int d, int c);
+
+}
+
+public class Car implements Ainterface{
+	
+	int x,y;
+
+	public Car(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	@Override
+	public void run() {
+		System.out.println("car");
+		
+	}
+
+	@Override
+	public int sum(int d, int c) {
+		// TODO Auto-generated method stub
+		return d+c;
+	}
+	
+	public void CarRun() {
+		System.out.println("차 달린다"+(x+y));
+	}
+	
+	
+}
+
+public class SuperCar extends Car implements Ainterface{
+	
+	public SuperCar(int x, int y) {
+		super(x+10, y+10);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void run() {
+		System.out.println("supercar"+(x+y));
+		
+	}
+
+	@Override
+	public int sum (int d, int c) {
+		// TODO Auto-generated method stub
+		return d-c;
+	}
+	public void superCarRun() {
+		System.out.println("슈퍼카 달린다");
+	}
+
+}
+
+import test.Ainterface;
+import test.Car;
+import test.SuperCar;
+
+public class main {
+
+	public static void main(String[] args) {
+		
+		Ainterface ai = new Car(10, 20);
+		ai.run();
+		//Carrun() 사용 불가능
+		
+		Car c = (Car) ai;   //car클래스가 가진 고유한 인스턴스 멤버(필드, 메소드)도 접근해서 사용 가능하게됨
+		c.CarRun();
+		System.out.println(ai.sum(40, 30));
+		
+		ai = new SuperCar(30, 40);
+		ai.run();
+		System.out.println(ai.sum(40, 30));
+	
+		
+		SuperCar sc = (SuperCar) ai; //supercar클래스가 가진 고유한 인스턴스 멤버(필드, 메소드)도 접근해서 사용 가능하게됨
+		sc.superCarRun();
+		sc.CarRun();
+		
+		Car sc2 = new SuperCar(30, 40);
+		System.out.println(sc2.sum(30, 20));
+		sc2.run();
+		
+		SuperCar sp = (SuperCar) sc2;
+		
+		sp.superCarRun();
+		
+		SuperCar sp2 = new SuperCar(20,20);
+		
+		Car c2 = (Car)sp2;
+		c2.run();
+	
+		
+	}
+
+}
